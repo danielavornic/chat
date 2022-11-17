@@ -6,6 +6,9 @@
     "es6": true
   },
   "rules": {
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-undef": "warn",
+    "no-console": "off",
+    "no-debugger": "off"
   }
 }

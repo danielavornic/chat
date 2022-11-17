@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import io from 'socket.io-client';
+
+import Chat from './Chat';
+import Home from './Home';
 
 function App() {
   const [socket] = useState(() => io('http://localhost:4000'));
@@ -14,9 +18,12 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="/chat" element={<Chat socket={socket} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

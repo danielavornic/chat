@@ -6,20 +6,26 @@ import { MessageInterface } from './types';
 
 const Chat = ({ socket }: { socket: Socket }) => {
   const [messages, setMessages] = useState<MessageInterface[]>([]);
+  const [users, setUsers] = useState<string[]>([]);
+
+  const scrollToBottom = () => {
+    const chatBody = document.getElementById('chat-body');
+    chatBody?.scrollTo(0, chatBody.scrollHeight);
+  };
 
   useEffect(() => {
     socket.on('messageResponse', (message: MessageInterface) => {
-      const isMessageInState = messages.find(
-        (m) => m.id === message.id && m.socketID === message.socketID,
-      );
-
-      if (!isMessageInState) setMessages((messages) => [...messages, message]);
+      setMessages((prevMessages) => [...prevMessages, message]);
+      scrollToBottom();
     });
+
+    socket.on('newUserResponse', (users: any) => setUsers(users));
 
     return () => {
       socket.off('messageResponse');
+      socket.off('newUserResponse');
     };
-  }, [socket]);
+  }, [socket, messages]);
 
   return (
     <div className="min-h-screen shadow bg-base-200 drawer h-52 drawer-mobile ">
@@ -29,7 +35,7 @@ const Chat = ({ socket }: { socket: Socket }) => {
         <ChatBody messages={messages} socket={socket} />
         <ChatFooter socket={socket} />
       </div>
-      <ChatSidebar />
+      <ChatSidebar users={users} />
     </div>
   );
 };

@@ -8,16 +8,32 @@ const io = require('socket.io')(server, {
 });
 
 const PORT = 4000;
+let users = [];
 
 io.on('connection', (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
 
+  socket.on('newUser', (data) => {
+    users.push(data);
+    socket.broadcast.emit('newUserResponse', users);
+    socket.emit('newUserResponse', users);
+  });
+
   socket.on('message', (data) => {
+    socket.broadcast.emit('messageResponse', data);
     socket.emit('messageResponse', data);
+
+    console.log(`⚡: ${data.socketID} user just sent a message!`);
   });
 
   socket.on('disconnect', () => {
     console.log('🔥: A user disconnected');
+
+    users = users.filter((user) => user.socketID !== socket.id);
+    socket.broadcast.emit('newUserResponse', users);
+    socket.emit('newUserResponse', users);
+
+    socket.disconnect();
   });
 });
 

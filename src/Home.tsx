@@ -1,17 +1,21 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
 
-const Home = () => {
+const Home = ({ socket }: { socket: Socket }) => {
   const navigate = useNavigate();
-  const [localNickname, setLocalNickname] = useState('');
+  const [nickname, setNickname] = useState('');
 
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setLocalNickname(e.target.value);
+    setNickname(e.target.value);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    localStorage.setItem('nickname', localNickname);
+    socket.emit('newUser', { nickname, socketID: socket.id });
+
+    localStorage.setItem('nickname', nickname);
+    setNickname('');
     navigate('/chat');
   };
 

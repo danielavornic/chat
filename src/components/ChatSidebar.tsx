@@ -1,11 +1,9 @@
 import { RiLogoutBoxLine } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
 
-export const ChatSidebar = () => {
-  const navigate = useNavigate();
+export const ChatSidebar = ({ users }: { users: any }) => {
   const signOut = () => {
     localStorage.removeItem('nickname');
-    navigate('/');
+    window.location.reload();
   };
 
   return (
@@ -39,12 +37,11 @@ export const ChatSidebar = () => {
             </div>
           </li>
           <ul>
-            <li>
-              <a>John Doe</a>
-            </li>
-            <li>
-              <a>Jane Doe</a>
-            </li>
+            {users.map((user: any) => (
+              <li key={user.id}>
+                <a>{user.nickname}</a>
+              </li>
+            ))}
           </ul>
         </ul>
 

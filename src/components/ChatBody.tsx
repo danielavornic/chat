@@ -9,7 +9,10 @@ interface ChatBodyProps {
 
 export const ChatBody = ({ messages, socket }: ChatBodyProps) => {
   return (
-    <div className="w-full h-full my-8 overflow-y-auto flex flex-col">
+    <div
+      className="w-full h-full my-8 overflow-y-auto flex flex-col"
+      id="chat-body"
+    >
       {messages && messages.length > 0 ? (
         messages.map((message, index) => (
           <Message

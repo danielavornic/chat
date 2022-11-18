@@ -22,21 +22,19 @@ function App() {
     });
 
     const nickname = localStorage.getItem('nickname');
-    if (nickname?.length) {
-      setNickname(nickname);
-    }
+    if (nickname?.length) setNickname(nickname);
 
     return () => {
       socket.off('connect');
       socket.off('disconnect');
     };
-  }, []);
+  }, [socket]);
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PublicRoute />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home socket={socket} />} />
         </Route>
         <Route path="chat" element={<ProtectedRoute />}>
           <Route path="/chat" element={<Chat socket={socket} />} />

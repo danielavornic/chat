@@ -1,4 +1,3 @@
-import { PropsWithChildren } from 'react';
 import cn from 'classnames';
 
 interface MessageProps {
@@ -22,7 +21,7 @@ export const Message = ({
         'flex',
         isMine
           ? 'flex-row-reverse text-right float-right'
-          : 'flex-row float-left',
+          : 'flex-row float-left text-left',
         isLast ? 'mb-2' : 'mb-4',
       )}
     >
@@ -31,8 +30,8 @@ export const Message = ({
           className={cn(
             'flex py-3 px-5 text-base rounded-2xl mb-1 tooltip tooltip-secondary select-none',
             isMine
-              ? 'bg-primary text-white tooltip-left'
-              : 'bg-gray-200 tooltip-right',
+              ? 'bg-primary text-white text-right tooltip-left'
+              : 'bg-gray-200 text-left tooltip-right',
           )}
           data-tip={time}
         >

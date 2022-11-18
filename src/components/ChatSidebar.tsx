@@ -1,11 +1,13 @@
-import {
-  RiLogoutBoxLine,
-  RiMessage3Fill,
-  RiUser3Fill,
-  RiWechat2Fill,
-} from 'react-icons/ri';
+import { RiLogoutBoxLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 
 export const ChatSidebar = () => {
+  const navigate = useNavigate();
+  const signOut = () => {
+    localStorage.removeItem('nickname');
+    navigate('/');
+  };
+
   return (
     <div className="drawer-side">
       <label htmlFor="sidebar" className="drawer-overlay"></label>
@@ -49,7 +51,7 @@ export const ChatSidebar = () => {
         <li className="disabled">
           <div className="flex flex-col">
             <p className="text-gray-500">Signed in as John Doe</p>
-            <button className="btn btn-secondary btn-sm">
+            <button className="btn btn-secondary btn-sm" onClick={signOut}>
               <RiLogoutBoxLine className="mr-2" />
               Sign out
             </button>

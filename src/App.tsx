@@ -5,9 +5,9 @@ import io from 'socket.io-client';
 import Chat from './Chat';
 import Home from './Home';
 
-function App() {
-  const [socket] = useState(() => io('http://localhost:4000'));
+const socket = io('http://localhost:4000');
 
+function App() {
   useEffect(() => {
     socket.on('connect', () => {
       console.log('connected');
@@ -15,6 +15,11 @@ function App() {
     socket.on('disconnect', () => {
       console.log('disconnected');
     });
+
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+    };
   }, []);
 
   return (

@@ -1,21 +1,30 @@
 import { useState } from 'react';
-import cn from 'classnames';
 import { RiSendPlane2Line } from 'react-icons/ri';
+import { Socket } from 'socket.io-client';
 
-export const ChatFooter = () => {
+import { useUser } from '../hooks/useUser';
+
+interface ChatFooterProps {
+  socket: Socket;
+}
+
+export const ChatFooter = ({ socket }: ChatFooterProps) => {
+  const { nickname } = useUser();
   const [message, setMessage] = useState('');
-  const [isSending, setIsSending] = useState(false);
 
   const submitMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (message.trim() === '') {
-      return;
-    }
+    if (message.trim() === '') return;
 
-    setIsSending(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsSending(false);
+    socket.emit('message', {
+      nickname,
+      message,
+      id: `${socket.id}${Math.random()}`,
+      socketID: socket.id,
+      time: new Date().toLocaleTimeString(),
+    });
+
     setMessage('');
   };
 
@@ -33,11 +42,8 @@ export const ChatFooter = () => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <button
-          type="submit"
-          className={cn('btn btn-square btn-primary', isSending && 'loading')}
-        >
-          {!isSending && <RiSendPlane2Line size={18} />}
+        <button type="submit" className="btn btn-square btn-primary">
+          <RiSendPlane2Line size={18} />
         </button>
       </form>
     </div>

@@ -11,6 +11,11 @@ const PORT = 4000;
 
 io.on('connection', (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
+
+  socket.on('message', (data) => {
+    socket.emit('messageResponse', data);
+  });
+
   socket.on('disconnect', () => {
     console.log('🔥: A user disconnected');
   });

@@ -1,9 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
-import { useUser } from './hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const { setNickname } = useUser();
   const navigate = useNavigate();
   const [localNickname, setLocalNickname] = useState('');
 
@@ -13,8 +11,7 @@ const Home = () => {
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // TODO: validate localNickname before setting it
-    setNickname(localNickname);
+    localStorage.setItem('nickname', localNickname);
     navigate('/chat');
   };
 
@@ -36,9 +33,9 @@ const Home = () => {
               onChange={handleNicknameChange}
             />
             <button
+              type="submit"
               form="nickname-form"
               className="btn btn-primary btn-md ml-4"
-              type="submit"
             >
               Get Started
             </button>

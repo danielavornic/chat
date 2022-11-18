@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import io from 'socket.io-client';
 
 import Chat from './Chat';
+import { ProtectedRoute } from './components';
+import { PublicRoute } from './components/PublicRoute';
 import Home from './Home';
+import { useUser } from './hooks/useUser';
 
 const socket = io('http://localhost:4000');
 
 function App() {
+  const { setNickname } = useUser();
+
   useEffect(() => {
     socket.on('connect', () => {
       console.log('connected');
@@ -15,6 +20,11 @@ function App() {
     socket.on('disconnect', () => {
       console.log('disconnected');
     });
+
+    const nickname = localStorage.getItem('nickname');
+    if (nickname?.length) {
+      setNickname(nickname);
+    }
 
     return () => {
       socket.off('connect');
@@ -25,8 +35,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<Home />} />
-        <Route path="/chat" element={<Chat socket={socket} />} />
+        <Route path="/" element={<PublicRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+        <Route path="chat" element={<ProtectedRoute />}>
+          <Route path="/chat" element={<Chat socket={socket} />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

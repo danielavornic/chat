@@ -2,14 +2,11 @@ import { useState } from 'react';
 import { RiSendPlane2Line } from 'react-icons/ri';
 import { Socket } from 'socket.io-client';
 
-import { useUser } from '../hooks/useUser';
-
 interface ChatFooterProps {
   socket: Socket;
 }
 
 export const ChatFooter = ({ socket }: ChatFooterProps) => {
-  const { nickname } = useUser();
   const [message, setMessage] = useState('');
 
   const submitMessage = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,7 +15,7 @@ export const ChatFooter = ({ socket }: ChatFooterProps) => {
     if (message.trim() === '') return;
 
     socket.emit('message', {
-      nickname,
+      nickname: localStorage.getItem('nickname'),
       message,
       id: `${socket.id}${Math.random()}`,
       socketID: socket.id,

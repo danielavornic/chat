@@ -9,19 +9,18 @@ interface ChatBodyProps {
 
 export const ChatBody = ({ messages, socket }: ChatBodyProps) => {
   return (
-    <div className="w-full h-full my-8 overflow-y-auto">
+    <div className="w-full h-full my-8 overflow-y-auto flex flex-col">
       {messages && messages.length > 0 ? (
         messages.map((message, index) => (
           <Message
             key={message.id}
             isLast={index === messages.length - 1}
             isMine={message.socketID === socket.id}
-          >
-            {message.message}
-          </Message>
+            {...message}
+          />
         ))
       ) : (
-        <div className="text-center text-xs">
+        <div className="text-center text-xs mx-auto">
           Conversation is empty
           <br />
           Start the conversation by sending a message
